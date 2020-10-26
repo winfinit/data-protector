@@ -78,6 +78,10 @@ export class DataProtector {
             return "boolean";
         } else if ( typeof valueToModify === "undefined") {
             return "undefined";
+        } else if (typeof valueToModify === "function" ) {
+            return "function";
+        } else if ( valueToModify === null ) {
+            return "null";
         } else {
             throw new Error("unknown primitive type");
         }
@@ -125,7 +129,11 @@ export class DataProtector {
             return true;
         } else if ( typeof valueToTest === "undefined") {
             return true;
-        } 
+        } else if ( typeof valueToTest === "function") {
+            return true;
+        } else if ( valueToTest === null) {
+            return true;
+        }
 
         return false;
     }
