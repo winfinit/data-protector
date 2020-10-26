@@ -28,10 +28,9 @@
   "homepage": "https://github.com/winfinit/data-protector#readme",
   "devDependencies": {
     "mocha": "^7.1.0",
-    "typescript": "^3.8.3"
-  },
-  "dependencies": {
+    "typescript": "^3.8.3",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0"
-  }
+  },
+  "dependencies": {}
 }
