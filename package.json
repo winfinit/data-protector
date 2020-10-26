@@ -1,0 +1,37 @@
+{
+  "name": "data-protector",
+  "version": "1.0.0",
+  "description": "Masks recursively javascript objects by defining the type of data that used to live in the object",
+  "main": "built/src/index.js",
+  "scripts": {
+    "test": "mocha --recursive built/test/",
+    "clean-build": "rm -Rf built/ && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winfinit/data-protector.git"
+  },
+  "keywords": [
+    "data protector",
+    "obfuscator",
+    "data whitelist",
+    "onject whitelist",
+    "secure logs",
+    "pii logs",
+    "pci logs"
+  ],
+  "author": "Roman Jurkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/winfinit/data-protector/issues"
+  },
+  "homepage": "https://github.com/winfinit/data-protector#readme",
+  "devDependencies": {
+    "mocha": "^7.1.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0"
+  }
+}
