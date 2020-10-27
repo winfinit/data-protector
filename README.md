@@ -116,12 +116,14 @@ const protectedObject = DataProtector.protect({
 
 ## Function prototype
 
+```javascript
 DataProtector.protect(
     valueToProtect: string | number | object | array | any, {
         jsonPath: string, 
         masker?: (valueToProtect: string) => string
-    }
+    }[]
 );
+```
 
 ## Library development
 
