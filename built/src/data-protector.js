@@ -24,8 +24,8 @@ var DataProtector = /** @class */ (function () {
         else {
             var whiltelistObj = DataProtector.getWhitelistObject(jsonPaths, lastPath);
             if (whiltelistObj !== undefined) {
-                if (whiltelistObj.filter) {
-                    dataToProtect = whiltelistObj.filter(dataToProtect);
+                if (whiltelistObj.masker) {
+                    dataToProtect = whiltelistObj.masker(dataToProtect);
                 }
             }
             else {

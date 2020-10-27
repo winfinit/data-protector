@@ -93,7 +93,7 @@ const protectedObject = DataProtector.protect({
         }, [
                 {
                     jsonPath: "$.array[0]", 
-                    filter: (valueToMask) => {
+                    masker: (valueToMask) => {
                         return "xxx";
                     }
                 }
@@ -119,7 +119,7 @@ const protectedObject = DataProtector.protect({
 DataProtector.protect(
     valueToProtect: string | number | object | array | any, {
         jsonPath: string, 
-        filter?: (valueToProtect: string) => string
+        masker?: (valueToProtect: string) => string
     }
 );
 

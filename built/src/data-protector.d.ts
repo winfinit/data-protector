@@ -1,6 +1,6 @@
 interface filterObject {
     "jsonPath": string;
-    "filter"?: (valueToProtect: string) => string;
+    "masker"?: (valueToProtect: string) => string;
 }
 export declare class DataProtector {
     static protect(dataToProtect: any, jsonPaths?: filterObject[], lastPath?: string): any;

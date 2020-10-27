@@ -184,7 +184,7 @@ describe('DataProtector class', function () {
                     string: "someString",
                     string2: "someString2"
                 }],
-        }, [{ jsonPath: "$.array[0]", filter: function (valueToMask) {
+        }, [{ jsonPath: "$.array[0]", masker: function (valueToMask) {
                     return "xxx";
                 } }]);
         //console.log(JSON.stringify(protectedObject, null, "\t"))

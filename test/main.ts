@@ -223,7 +223,7 @@ describe('DataProtector class', function() {
                 string: "someString",
                 string2: "someString2"
             }],
-        }, [{jsonPath: "$.array[0]", filter: (valueToMask) => {
+        }, [{jsonPath: "$.array[0]", masker: (valueToMask) => {
             return "xxx";
         }}]);
 

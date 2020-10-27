@@ -1,6 +1,6 @@
 interface filterObject {
     "jsonPath": string;
-    "filter"?: (valueToProtect: string) => string;
+    "masker"?: (valueToProtect: string) => string;
 }
 
 export class DataProtector {
@@ -22,8 +22,8 @@ export class DataProtector {
         } else {
             const whiltelistObj = DataProtector.getWhitelistObject(jsonPaths, lastPath);
             if ( whiltelistObj !== undefined ) {
-                if ( whiltelistObj.filter ) {
-                    dataToProtect = whiltelistObj.filter(dataToProtect);
+                if ( whiltelistObj.masker ) {
+                    dataToProtect = whiltelistObj.masker(dataToProtect);
                 } 
             } else {
                 dataToProtect = DataProtector.protectPrimitive(dataToProtect);
