@@ -131,7 +131,7 @@ Clone the repository and change your current directory into a projects directory
 
 ```plain
 git clone https://github.com/winfinit/data-protector.git
-cd covid19-us
+cd data-protector
 ```
 
 Make sure typescript and mocha are installed
