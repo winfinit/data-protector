@@ -2,23 +2,22 @@ export class DataProtector {
 
 
     static protect(dataToProtect: any, jsonPaths: string[] = [], lastPath: string = "$"): any {
-        // check type
-        if ( DataProtector.isPrimitive(dataToProtect) ) {
-            if (! DataProtector.filterTest(jsonPaths, lastPath) ) {
-                dataToProtect = DataProtector.protectPrimitive(dataToProtect);
-            }
-        } else if ( Array.isArray(dataToProtect) ) {
+        if ( Array.isArray(dataToProtect) ) {
             for ( const index in dataToProtect ) {
                 const currentJsonPath = `${lastPath}[${index}]`;
                 dataToProtect[index] = this.protect(dataToProtect[index], jsonPaths, currentJsonPath);                    
             }
-        }  else if ( typeof dataToProtect === "object" ) {
+        }  else if (dataToProtect === null) {
+            dataToProtect = "null";
+        } else if ( typeof dataToProtect === "object" ) {
             for (const key in dataToProtect) {
                 const currentJsonPath = `${lastPath}.${key}`;
                 dataToProtect[key] = this.protect(dataToProtect[key], jsonPaths, currentJsonPath);
             }
         } else {
-            throw new Error("unsupported type: " + typeof dataToProtect);
+            if (! DataProtector.filterTest(jsonPaths, lastPath) ) {
+                dataToProtect = DataProtector.protectPrimitive(dataToProtect);
+            }
         }
         return dataToProtect;
     }
@@ -83,7 +82,7 @@ export class DataProtector {
         } else if ( valueToModify === null ) {
             return "null";
         } else {
-            throw new Error("unknown primitive type");
+            return "unknown-type-" + typeof valueToModify;
         }
     }
 

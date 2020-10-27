@@ -108,24 +108,6 @@ describe('DataProtector class', function() {
         expect(protectedString).to.be.equal("string(8).contains(upper,lower,number,special,space,newline)");
     });
 
-    it('should protect simple object' , () => {
-        const protectedObject = DataProtector.protect({
-            string: "string",
-            number: 123,
-            undefined: undefined,
-            empty: "",
-            boolean: true
-        });
-
-        // console.log(protectedObject);
-
-        expect(protectedObject).to.have.a.property("string").that.equals("string(6).contains(lower)");
-        expect(protectedObject).to.have.a.property("number").that.is.equal("number.int(3).positive");
-        expect(protectedObject).to.have.a.property("undefined").that.is.equal("undefined");
-        expect(protectedObject).to.have.a.property("empty").that.is.equal("string(0).empty");
-        expect(protectedObject).to.have.a.property("boolean").that.is.equal("boolean");
-    });
-
     it('should protect simple array' , () => {
         const protectedArray = DataProtector.protect([-20.44, "String4*", false, "", undefined]);
 
@@ -169,11 +151,15 @@ describe('DataProtector class', function() {
             }],
             undefined: undefined,
             empty: "",
-            boolean: true
+            boolean: true,
+            null: null,
+            function: function() {}
         });
 
         //console.log(JSON.stringify(protectedObject, null, "\t"))
 
+        expect(protectedObject).to.have.a.property("function").that.equals("function");
+        expect(protectedObject).to.have.a.property("null").that.equals("null");
         expect(protectedObject).to.have.a.property("string").that.equals("string(6).contains(lower)");
         expect(protectedObject).to.have.a.property("number").that.is.equal("number.int(3).positive");
         expect(protectedObject).to.have.a.property("undefined").that.is.equal("undefined");

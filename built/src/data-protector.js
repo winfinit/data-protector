@@ -6,17 +6,14 @@ var DataProtector = /** @class */ (function () {
     DataProtector.protect = function (dataToProtect, jsonPaths, lastPath) {
         if (jsonPaths === void 0) { jsonPaths = []; }
         if (lastPath === void 0) { lastPath = "$"; }
-        // check type
-        if (DataProtector.isPrimitive(dataToProtect)) {
-            if (!DataProtector.filterTest(jsonPaths, lastPath)) {
-                dataToProtect = DataProtector.protectPrimitive(dataToProtect);
-            }
-        }
-        else if (Array.isArray(dataToProtect)) {
+        if (Array.isArray(dataToProtect)) {
             for (var index in dataToProtect) {
                 var currentJsonPath = lastPath + "[" + index + "]";
                 dataToProtect[index] = this.protect(dataToProtect[index], jsonPaths, currentJsonPath);
             }
+        }
+        else if (dataToProtect === null) {
+            dataToProtect = "null";
         }
         else if (typeof dataToProtect === "object") {
             for (var key in dataToProtect) {
@@ -25,7 +22,9 @@ var DataProtector = /** @class */ (function () {
             }
         }
         else {
-            throw new Error("unsupported type: " + typeof dataToProtect);
+            if (!DataProtector.filterTest(jsonPaths, lastPath)) {
+                dataToProtect = DataProtector.protectPrimitive(dataToProtect);
+            }
         }
         return dataToProtect;
     };
@@ -90,7 +89,7 @@ var DataProtector = /** @class */ (function () {
             return "null";
         }
         else {
-            throw new Error("unknown primitive type");
+            return "unknown-type-" + typeof valueToModify;
         }
     };
     DataProtector.protectNumber = function (numberToProtect) {
