@@ -1,6 +1,10 @@
+interface filterObject {
+    "jsonPath": string;
+    "filter"?: (valueToProtect: string) => string;
+}
 export declare class DataProtector {
-    static protect(dataToProtect: any, jsonPaths?: string[], lastPath?: string): any;
-    static filterTest(jsonPaths: string[] | undefined, pathToTest: string): boolean;
+    static protect(dataToProtect: any, jsonPaths?: filterObject[], lastPath?: string): any;
+    static getWhitelistObject(jsonPaths: filterObject[] | undefined, pathToTest: string): filterObject | undefined;
     static protectString(stringToModify: string): string;
     static protectPrimitive(valueToModify: any): string;
     static protectNumber(numberToProtect: number): string;
@@ -8,4 +12,5 @@ export declare class DataProtector {
     static isPrimitive(valueToTest: any): boolean;
     posixType(valueToTest: any): void;
 }
+export {};
 //# sourceMappingURL=data-protector.d.ts.map

@@ -22,20 +22,22 @@ var DataProtector = /** @class */ (function () {
             }
         }
         else {
-            if (!DataProtector.filterTest(jsonPaths, lastPath)) {
+            var whiltelistObj = DataProtector.getWhitelistObject(jsonPaths, lastPath);
+            if (whiltelistObj !== undefined) {
+                if (whiltelistObj.filter) {
+                    dataToProtect = whiltelistObj.filter(dataToProtect);
+                }
+            }
+            else {
                 dataToProtect = DataProtector.protectPrimitive(dataToProtect);
             }
         }
         return dataToProtect;
     };
-    DataProtector.filterTest = function (jsonPaths, pathToTest) {
+    DataProtector.getWhitelistObject = function (jsonPaths, pathToTest) {
         if (jsonPaths === void 0) { jsonPaths = []; }
-        if (jsonPaths.includes(pathToTest)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        var returnObj = jsonPaths.find(function (element) { return element.jsonPath === pathToTest; });
+        return returnObj;
     };
     DataProtector.protectString = function (stringToModify) {
         var valueToProtect = "string(" + stringToModify.length + ")";
@@ -67,9 +69,6 @@ var DataProtector = /** @class */ (function () {
         return valueToProtect;
     };
     DataProtector.protectPrimitive = function (valueToModify) {
-        if (!DataProtector.isPrimitive(valueToModify)) {
-            throw new Error("passed value is not a primitive type");
-        }
         if (typeof valueToModify === "number") {
             return DataProtector.protectNumber(valueToModify);
         }

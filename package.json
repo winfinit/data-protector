@@ -1,6 +1,6 @@
 {
   "name": "data-protector",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Masks recursively javascript objects by defining the type of data that used to live in the object",
   "main": "built/src/index.js",
   "scripts": {

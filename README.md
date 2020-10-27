@@ -60,7 +60,7 @@ const protectedObject = DataProtector.protect({
     undefined: undefined,
     empty: "",
     boolean: true
-}, ["$.array[0]", "$.array[1].string2"]);
+}, [{jsonPath: "$.array[0]"}, {jsonPath: "$.array[1].string2"}]);
 
 /*
 {
@@ -85,8 +85,43 @@ const protectedObject = DataProtector.protect({
 }
 */
 
+const protectedObject = DataProtector.protect({
+            array: [123, {
+                string: "someString",
+                string2: "someString2"
+            }],
+        }, [
+                {
+                    jsonPath: "$.array[0]", 
+                    filter: (valueToMask) => {
+                        return "xxx";
+                    }
+                }
+            ]
+);
+
+/*
+{
+	"array": [
+		"xxx",
+		{
+			"string": "string(10).contains(upper,lower)",
+			"string2": "string(11).contains(upper,lower,number)"
+		}
+	]
+}
+*/
+
 ```
 
+## Function prototype
+
+DataProtector.protect(
+    valueToProtect: string | number | object | array | any, {
+        jsonPath: string, 
+        filter?: (valueToProtect: string) => string
+    }
+);
 
 ## Library development
 

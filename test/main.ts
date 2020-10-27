@@ -177,7 +177,7 @@ describe('DataProtector class', function() {
             undefined: undefined,
             empty: "",
             boolean: true
-        }, ["$.number"]);
+        }, [{jsonPath: "$.number"}]);
 
         // console.log("protectedObject", protectedObject);
         
@@ -202,7 +202,7 @@ describe('DataProtector class', function() {
             undefined: undefined,
             empty: "",
             boolean: true
-        }, ["$.array[0]", "$.array[1].string2"]);
+        }, [{jsonPath: "$.array[0]"}, {jsonPath: "$.array[1].string2"}]);
 
         //console.log(JSON.stringify(protectedObject, null, "\t"))
 
@@ -215,6 +215,23 @@ describe('DataProtector class', function() {
         expect(protectedObject.array[1]).to.have.a.property("string").that.equals("string(10).contains(upper,lower)");
         expect(protectedObject.array[1]).to.have.a.property("string2").that.equals("someString2");
         expect(protectedObject.array[0]).to.equals(123);
+    });
+
+    it('custom filter' , () => {
+        const protectedObject = DataProtector.protect({
+            array: [123, {
+                string: "someString",
+                string2: "someString2"
+            }],
+        }, [{jsonPath: "$.array[0]", filter: (valueToMask) => {
+            return "xxx";
+        }}]);
+
+        //console.log(JSON.stringify(protectedObject, null, "\t"))
+
+        expect(protectedObject.array[1]).to.have.a.property("string").that.equals("string(10).contains(upper,lower)");
+        expect(protectedObject.array[1]).to.have.a.property("string2").that.equals("string(11).contains(upper,lower,number)");
+        expect(protectedObject.array[0]).to.equals("xxx");
     });
 
 });

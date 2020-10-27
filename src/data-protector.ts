@@ -1,13 +1,18 @@
+interface filterObject {
+    "jsonPath": string;
+    "filter"?: (valueToProtect: string) => string;
+}
+
 export class DataProtector {
 
 
-    static protect(dataToProtect: any, jsonPaths: string[] = [], lastPath: string = "$"): any {
+    static protect(dataToProtect: any, jsonPaths: filterObject[] = [], lastPath: string = "$"): any {
         if ( Array.isArray(dataToProtect) ) {
             for ( const index in dataToProtect ) {
                 const currentJsonPath = `${lastPath}[${index}]`;
                 dataToProtect[index] = this.protect(dataToProtect[index], jsonPaths, currentJsonPath);                    
             }
-        }  else if (dataToProtect === null) {
+        } else if (dataToProtect === null) {
             dataToProtect = "null";
         } else if ( typeof dataToProtect === "object" ) {
             for (const key in dataToProtect) {
@@ -15,19 +20,21 @@ export class DataProtector {
                 dataToProtect[key] = this.protect(dataToProtect[key], jsonPaths, currentJsonPath);
             }
         } else {
-            if (! DataProtector.filterTest(jsonPaths, lastPath) ) {
+            const whiltelistObj = DataProtector.getWhitelistObject(jsonPaths, lastPath);
+            if ( whiltelistObj !== undefined ) {
+                if ( whiltelistObj.filter ) {
+                    dataToProtect = whiltelistObj.filter(dataToProtect);
+                } 
+            } else {
                 dataToProtect = DataProtector.protectPrimitive(dataToProtect);
             }
         }
         return dataToProtect;
     }
 
-    static filterTest(jsonPaths: string[] = [], pathToTest: string): boolean {
-        if ( jsonPaths.includes(pathToTest) ) {
-            return true;
-        } else {
-            return false;
-        }
+    static getWhitelistObject(jsonPaths: filterObject[] = [], pathToTest: string): filterObject | undefined {
+        const returnObj = jsonPaths.find(element => element.jsonPath === pathToTest);
+        return returnObj;
     }
 
     static protectString(stringToModify: string): string {
@@ -65,9 +72,6 @@ export class DataProtector {
     }
 
     static protectPrimitive(valueToModify: any): string {
-        if (! DataProtector.isPrimitive(valueToModify) ) {
-            throw new Error("passed value is not a primitive type");
-        }
 
         if ( typeof valueToModify === "number" ) {
             return DataProtector.protectNumber(valueToModify);

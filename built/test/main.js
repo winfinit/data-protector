@@ -144,7 +144,7 @@ describe('DataProtector class', function () {
             undefined: undefined,
             empty: "",
             boolean: true
-        }, ["$.number"]);
+        }, [{ jsonPath: "$.number" }]);
         // console.log("protectedObject", protectedObject);
         expect(protectedObject).to.have.a.property("string").that.equals("string(6).contains(lower)");
         expect(protectedObject).to.have.a.property("number").that.equals(123);
@@ -166,7 +166,7 @@ describe('DataProtector class', function () {
             undefined: undefined,
             empty: "",
             boolean: true
-        }, ["$.array[0]", "$.array[1].string2"]);
+        }, [{ jsonPath: "$.array[0]" }, { jsonPath: "$.array[1].string2" }]);
         //console.log(JSON.stringify(protectedObject, null, "\t"))
         expect(protectedObject).to.have.a.property("string").that.equals("string(6).contains(lower)");
         expect(protectedObject).to.have.a.property("number").that.is.equal("number.int(3).positive");
@@ -177,6 +177,20 @@ describe('DataProtector class', function () {
         expect(protectedObject.array[1]).to.have.a.property("string").that.equals("string(10).contains(upper,lower)");
         expect(protectedObject.array[1]).to.have.a.property("string2").that.equals("someString2");
         expect(protectedObject.array[0]).to.equals(123);
+    });
+    it('custom filter', function () {
+        var protectedObject = data_protector_1.DataProtector.protect({
+            array: [123, {
+                    string: "someString",
+                    string2: "someString2"
+                }],
+        }, [{ jsonPath: "$.array[0]", filter: function (valueToMask) {
+                    return "xxx";
+                } }]);
+        //console.log(JSON.stringify(protectedObject, null, "\t"))
+        expect(protectedObject.array[1]).to.have.a.property("string").that.equals("string(10).contains(upper,lower)");
+        expect(protectedObject.array[1]).to.have.a.property("string2").that.equals("string(11).contains(upper,lower,number)");
+        expect(protectedObject.array[0]).to.equals("xxx");
     });
 });
 //# sourceMappingURL=main.js.map
