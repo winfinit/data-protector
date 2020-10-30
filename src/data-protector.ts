@@ -7,29 +7,36 @@ export class DataProtector {
 
 
     static protect(dataToProtect: any, jsonPaths: filterObject[] = [], lastPath: string = "$"): any {
-        if ( Array.isArray(dataToProtect) ) {
-            for ( const index in dataToProtect ) {
+        // for initial object, we want to ensure it is a copy
+        let copyDataToProtect;
+        if ( !DataProtector.isPrimitive(dataToProtect) && lastPath === "$" ) {
+            copyDataToProtect = Object.assign({}, dataToProtect);;
+        } else {
+            copyDataToProtect = dataToProtect;
+        }
+        if ( Array.isArray(copyDataToProtect) ) {
+            for ( const index in copyDataToProtect ) {
                 const currentJsonPath = `${lastPath}[${index}]`;
-                dataToProtect[index] = this.protect(dataToProtect[index], jsonPaths, currentJsonPath);                    
+                copyDataToProtect[index] = this.protect(copyDataToProtect[index], jsonPaths, currentJsonPath);  
             }
-        } else if (dataToProtect === null) {
-            dataToProtect = "null";
-        } else if ( typeof dataToProtect === "object" ) {
-            for (const key in dataToProtect) {
+        } else if (copyDataToProtect === null) {
+            copyDataToProtect = "null";
+        } else if ( typeof copyDataToProtect === "object" ) {
+            for (const key in copyDataToProtect) {
                 const currentJsonPath = `${lastPath}.${key}`;
-                dataToProtect[key] = this.protect(dataToProtect[key], jsonPaths, currentJsonPath);
+                copyDataToProtect[key] = this.protect(copyDataToProtect[key], jsonPaths, currentJsonPath);
             }
         } else {
             const whiltelistObj = DataProtector.getWhitelistObject(jsonPaths, lastPath);
             if ( whiltelistObj !== undefined ) {
                 if ( whiltelistObj.masker ) {
-                    dataToProtect = whiltelistObj.masker(dataToProtect);
+                    copyDataToProtect = whiltelistObj.masker(copyDataToProtect);
                 } 
             } else {
-                dataToProtect = DataProtector.protectPrimitive(dataToProtect);
+                copyDataToProtect = DataProtector.protectPrimitive(copyDataToProtect);
             }
         }
-        return dataToProtect;
+        return copyDataToProtect;
     }
 
     static getWhitelistObject(jsonPaths: filterObject[] = [], pathToTest: string): filterObject | undefined {

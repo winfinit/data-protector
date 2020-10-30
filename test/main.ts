@@ -108,6 +108,12 @@ describe('DataProtector class', function() {
         expect(protectedString).to.be.equal("string(8).contains(upper,lower,number,special,space,newline)");
     });
 
+    it('should protect primitive' , () => {
+        const protectedArray = DataProtector.protect(-20.44);
+
+        expect(protectedArray).to.equal("number.float(2,2).negative");
+    });
+
     it('should protect simple array' , () => {
         const protectedArray = DataProtector.protect([-20.44, "String4*", false, "", undefined]);
 
