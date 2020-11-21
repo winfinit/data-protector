@@ -195,7 +195,7 @@ describe('DataProtector class', function() {
     });
 
     it('should protect complex object with a filter' , () => {
-        const protectedObject = DataProtector.protect({
+        const originalObject: any = {
             string: "string",
             number: 123,
             array: [123, {
@@ -208,7 +208,8 @@ describe('DataProtector class', function() {
             undefined: undefined,
             empty: "",
             boolean: true
-        }, [{jsonPath: "$.array[0]"}, {jsonPath: "$.array[1].string2"}]);
+        };
+        const protectedObject = DataProtector.protect(originalObject, [{jsonPath: "$.array[0]"}, {jsonPath: "$.array[1].string2"}]);
 
         //console.log(JSON.stringify(protectedObject, null, "\t"))
 
@@ -221,6 +222,9 @@ describe('DataProtector class', function() {
         expect(protectedObject.array[1]).to.have.a.property("string").that.equals("string(10).contains(upper,lower)");
         expect(protectedObject.array[1]).to.have.a.property("string2").that.equals("someString2");
         expect(protectedObject.array[0]).to.equals(123);
+
+        expect(originalObject.array2[0]).to.equal(123);
+        expect(originalObject.array2[1].string).to.equal("someString");
     });
 
     it('custom filter' , () => {

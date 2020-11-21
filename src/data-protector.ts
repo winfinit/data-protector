@@ -5,12 +5,33 @@ interface filterObject {
 
 export class DataProtector {
 
+    static deepCopy(inObject: any): any {
+        let outObject: any;
+        let value: any; 
+        let key: any;
+
+        if (typeof inObject !== "object" || inObject === null) {
+          return inObject // Return the value if inObject is not an object
+        }
+      
+        // Create an array or object to hold the values
+        outObject = Array.isArray(inObject) ? [] : {}
+      
+        for (key in inObject) {
+          value = inObject[key]
+      
+          // Recursively (deep) copy for nested objects, including arrays
+          outObject[key] = DataProtector.deepCopy(value)
+        }
+      
+        return outObject
+    }
 
     static protect(dataToProtect: any, jsonPaths: filterObject[] = [], lastPath: string = "$"): any {
         // for initial object, we want to ensure it is a copy
         let copyDataToProtect;
         if ( !DataProtector.isPrimitive(dataToProtect) && lastPath === "$" ) {
-            copyDataToProtect = Object.create(dataToProtect);;
+            copyDataToProtect = DataProtector.deepCopy(dataToProtect);;
         } else {
             copyDataToProtect = dataToProtect;
         }

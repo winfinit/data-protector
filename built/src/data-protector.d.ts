@@ -3,6 +3,7 @@ interface filterObject {
     "masker"?: (valueToProtect: string) => string;
 }
 export declare class DataProtector {
+    static deepCopy(inObject: any): any;
     static protect(dataToProtect: any, jsonPaths?: filterObject[], lastPath?: string): any;
     static getWhitelistObject(jsonPaths: filterObject[] | undefined, pathToTest: string): filterObject | undefined;
     static protectString(stringToModify: string): string;
