@@ -1,8 +1,8 @@
 {
   "name": "data-protector",
-  "version": "2.1.8",
-  "description": "Masks recursively javascript objects by defining the type of data that used to live in the object",
-  "main": "built/src/index.js",
+  "version": "2.1.10",
+  "description": "Masks javascript data constructs by replacing data with abstract yet descriptive values",
+  "main": "built/src/data-protector.js",
   "scripts": {
     "test": "mocha --recursive built/test/",
     "clean-build": "rm -Rf built/ && tsc"

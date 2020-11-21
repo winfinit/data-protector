@@ -10,7 +10,7 @@ export class DataProtector {
         // for initial object, we want to ensure it is a copy
         let copyDataToProtect;
         if ( !DataProtector.isPrimitive(dataToProtect) && lastPath === "$" ) {
-            copyDataToProtect = Object.assign({}, dataToProtect);;
+            copyDataToProtect = Object.create(dataToProtect);;
         } else {
             copyDataToProtect = dataToProtect;
         }
